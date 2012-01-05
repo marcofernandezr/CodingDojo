@@ -58,16 +58,19 @@ public class TexasHoldEmHandFactory {
 				straightFlushHandOptions.add(straightFlushCards);
 			}
 		}
-		TexasHoldEmHand result = null;
 		List<PokerCard> bestHand = findBestStraightHand(straightFlushHandOptions, flush);
 		if (bestHand != null) {
 			if (flush) {
-				result = new TexasHoldEmHand(bestHand, getSortedUnusedCards(pokerCards, bestHand), bestHand.get(0), "T".equals(bestHand.get(0).getRank()) ? TexasHoldEmType.ROYAL_FLUSH : TexasHoldEmType.STRAIGHT_FLUSH);
+				if ("T".equals(bestHand.get(0).getRank())) {
+					return new TexasHoldEmHand(bestHand, getSortedUnusedCards(pokerCards, bestHand), TexasHoldEmType.ROYAL_FLUSH);
+				} else {
+					return new TexasHoldEmHand(bestHand, getSortedUnusedCards(pokerCards, bestHand), TexasHoldEmType.STRAIGHT_FLUSH, bestHand.get(0));
+				}
 			} else {
-				result = new TexasHoldEmHand(bestHand, getSortedUnusedCards(pokerCards, bestHand), bestHand.get(0), TexasHoldEmType.STRAIGHT);
+				return new TexasHoldEmHand(bestHand, getSortedUnusedCards(pokerCards, bestHand), TexasHoldEmType.STRAIGHT, bestHand.get(0));
 			}
 		}
-		return result;
+		return null;
 	}
 
 	private TexasHoldEmHand findFlushHand(List<PokerCard> pokerCards) {
@@ -75,7 +78,7 @@ public class TexasHoldEmHandFactory {
 		TexasHoldEmHand flushHand = null;
 		if (flushCards != null) {
 			List<PokerCard> usedCards = new ArrayList<PokerCard>(flushCards.subList(0, 5));
-			flushHand = new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), usedCards.get(0), TexasHoldEmType.FLUSH);
+			flushHand = new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), TexasHoldEmType.FLUSH, usedCards.get(0));
 		}
 		return flushHand;
 	}
@@ -160,11 +163,12 @@ public class TexasHoldEmHandFactory {
 	}
 
 	private TexasHoldEmHand createFoldHand(List<PokerCard> pokerCards) {
-		return new TexasHoldEmHand(new ArrayList<PokerCard>(), pokerCards, null, null);
+		return new TexasHoldEmHand(new ArrayList<PokerCard>(), pokerCards, null);
 	}
 
 	private TexasHoldEmHand findHighCardHand(List<PokerCard> pokerCards) {
-		return new TexasHoldEmHand(pokerCards.subList(0, 5), pokerCards.subList(5, 7), pokerCards.get(0), TexasHoldEmType.HIGH_CARD);
+		List<PokerCard> usedCards = pokerCards.subList(0, 5);
+		return new TexasHoldEmHand(usedCards, pokerCards.subList(5, 7), TexasHoldEmType.HIGH_CARD, usedCards.toArray(new PokerCard[5]));
 	}
 
 	private TexasHoldEmHand findRankHand(List<PokerCard> pokerCards) {
@@ -188,7 +192,7 @@ public class TexasHoldEmHandFactory {
 				List<PokerCard> sortedUnusedCards = getSortedUnusedCards(pokerCards, rankSet);
 				List<PokerCard> usedCards = new ArrayList<PokerCard>(rankSet);
 				usedCards.add(sortedUnusedCards.remove(0));
-				return new TexasHoldEmHand(usedCards, sortedUnusedCards, usedCards.get(0), TexasHoldEmType.QUAD);
+				return new TexasHoldEmHand(usedCards, sortedUnusedCards, TexasHoldEmType.QUAD, usedCards.get(0), usedCards.get(4));
 			}
 			if (rankSet.size() == 3) {
 				threeCardSets.add(rankSet);
@@ -201,16 +205,16 @@ public class TexasHoldEmHandFactory {
 			List<PokerCard> usedCards = new ArrayList<PokerCard>(threeCardSets.remove(0));
 			if (!threeCardSets.isEmpty()) {
 				usedCards.addAll(threeCardSets.get(0).subList(0, 2));
-				return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), usedCards.get(0), TexasHoldEmType.FULL_HOUSE);
+				return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), TexasHoldEmType.FULL_HOUSE, usedCards.get(0), usedCards.get(3));
 			}
 			if (!twoCardSets.isEmpty()) {
 				usedCards.addAll(twoCardSets.get(0));
-				return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), usedCards.get(0), TexasHoldEmType.FULL_HOUSE);
+				return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), TexasHoldEmType.FULL_HOUSE, usedCards.get(0), usedCards.get(3));
 			}
 			List<PokerCard> sortedUnusedCards = getSortedUnusedCards(pokerCards, usedCards);
 			usedCards.add(sortedUnusedCards.remove(0));
 			usedCards.add(sortedUnusedCards.remove(0));
-			return new TexasHoldEmHand(usedCards, sortedUnusedCards, usedCards.get(0), TexasHoldEmType.TRIP);
+			return new TexasHoldEmHand(usedCards, sortedUnusedCards, TexasHoldEmType.TRIP, usedCards.get(0), usedCards.get(3), usedCards.get(4));
 		}
 
 		if (!twoCardSets.isEmpty()) {
@@ -219,13 +223,13 @@ public class TexasHoldEmHandFactory {
 				usedCards.addAll(twoCardSets.get(0));
 				List<PokerCard> sortedUnusedCards = getSortedUnusedCards(pokerCards, usedCards);
 				usedCards.add(sortedUnusedCards.remove(0));
-				return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), usedCards.get(0), TexasHoldEmType.TWO_PAIRS);
+				return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), TexasHoldEmType.TWO_PAIRS, usedCards.get(0), usedCards.get(2), usedCards.get(4));
 			}
 			List<PokerCard> sortedUnusedCards = getSortedUnusedCards(pokerCards, usedCards);
 			usedCards.add(sortedUnusedCards.remove(0));
 			usedCards.add(sortedUnusedCards.remove(0));
 			usedCards.add(sortedUnusedCards.remove(0));
-			return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), usedCards.get(0), TexasHoldEmType.ONE_PAIR);
+			return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), TexasHoldEmType.ONE_PAIR, usedCards.get(0), usedCards.get(2), usedCards.get(3), usedCards.get(4));
 		}
 		return null;
 	}

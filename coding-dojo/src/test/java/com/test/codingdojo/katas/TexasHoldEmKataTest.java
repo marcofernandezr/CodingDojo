@@ -47,11 +47,11 @@ public class TexasHoldEmKataTest {
 		TexasHoldEmHand hand = kata.createHand(asList("2h", "3h", "Th", "Qh", "Ah", "Jh", "Kh"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.ROYAL_FLUSH, hand.getType());
-		assertEquals(new PokerCard("Th"), hand.getKicker());
+		assertTrue(hand.getKickers().isEmpty());
 
 		hand = kata.createHand(asList("Ah", "Qh", "Th", "Qd", "Jh", "Kh", "3s"));
 		assertEquals(TexasHoldEmType.ROYAL_FLUSH, hand.getType());
-		assertEquals(new PokerCard("Th"), hand.getKicker());
+		assertTrue(hand.getKickers().isEmpty());
 	}
 
 	@Test
@@ -59,12 +59,12 @@ public class TexasHoldEmKataTest {
 		TexasHoldEmHand hand = kata.createHand(asList("9c", "8c", "7c", "6c", "5c", "4h", "3s"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.STRAIGHT_FLUSH, hand.getType());
-		assertEquals(new PokerCard("5c"), hand.getKicker());
+		assertEquals(asList(new PokerCard("5c")), hand.getKickers());
 
 		hand = kata.createHand(asList("9c", "8c", "7c", "6c", "5c", "Tc", "Jc"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.STRAIGHT_FLUSH, hand.getType());
-		assertEquals(new PokerCard("7c"), hand.getKicker());
+		assertEquals(asList(new PokerCard("7c")), hand.getKickers());
 
 	}
 
@@ -73,7 +73,7 @@ public class TexasHoldEmKataTest {
 		TexasHoldEmHand hand = kata.createHand(asList("Kh", "Kc", "8h", "Kd", "Ks", "2h", "As"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.QUAD, hand.getType());
-		assertEquals(new PokerCard("Kh"), hand.getKicker());
+		assertEquals(asList(new PokerCard("Kh"), new PokerCard("As")), hand.getKickers());
 	}
 
 	@Test
@@ -81,7 +81,7 @@ public class TexasHoldEmKataTest {
 		TexasHoldEmHand hand = kata.createHand(asList("Kh", "Kc", "Ah", "Kd", "Ts", "Th", "As"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.FULL_HOUSE, hand.getType());
-		assertEquals(new PokerCard("Kh"), hand.getKicker());
+		assertEquals(asList(new PokerCard("Kh"), new PokerCard("Ah")), hand.getKickers());
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class TexasHoldEmKataTest {
 		TexasHoldEmHand hand = kata.createHand(asList("Ah", "2h", "5h", "Kh", "Jh", "Th", "As"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.FLUSH, hand.getType());
-		assertEquals(new PokerCard("Ah"), hand.getKicker());
+		assertEquals(asList(new PokerCard("Ah")), hand.getKickers());
 	}
 
 	@Test
@@ -97,7 +97,7 @@ public class TexasHoldEmKataTest {
 		TexasHoldEmHand hand = kata.createHand(asList("Ah", "2h", "3s", "Kc", "Jh", "Qc", "Ts"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.STRAIGHT, hand.getType());
-		assertEquals(new PokerCard("Qc"), hand.getKicker());
+		assertEquals(asList(new PokerCard("Qc")), hand.getKickers());
 	}
 
 	@Test
@@ -105,7 +105,7 @@ public class TexasHoldEmKataTest {
 		TexasHoldEmHand hand = kata.createHand(asList("Th", "2h", "Ts", "Kc", "Tc", "Qc", "3s"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.TRIP, hand.getType());
-		assertEquals(new PokerCard("Th"), hand.getKicker());
+		assertEquals(asList(new PokerCard("Th"), new PokerCard("Kc"), new PokerCard("Qc")), hand.getKickers());
 	}
 
 	@Test
@@ -113,7 +113,7 @@ public class TexasHoldEmKataTest {
 		TexasHoldEmHand hand = kata.createHand(asList("Th", "2h", "Ts", "Qd", "Jc", "Qc", "3s"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.TWO_PAIRS, hand.getType());
-		assertEquals(new PokerCard("Qd"), hand.getKicker());
+		assertEquals(asList(new PokerCard("Qd"), new PokerCard("Th"), new PokerCard("Jc")), hand.getKickers());
 	}
 
 	@Test
@@ -121,7 +121,7 @@ public class TexasHoldEmKataTest {
 		TexasHoldEmHand hand = kata.createHand(asList("Th", "2h", "As", "Qd", "Jc", "Qc", "3s"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.ONE_PAIR, hand.getType());
-		assertEquals(new PokerCard("Qd"), hand.getKicker());
+		assertEquals(asList(new PokerCard("Qd"), new PokerCard("As"), new PokerCard("Jc"), new PokerCard("Th")), hand.getKickers());
 	}
 
 	@Test
@@ -129,7 +129,7 @@ public class TexasHoldEmKataTest {
 		TexasHoldEmHand hand = kata.createHand(asList("Th", "2h", "As", "Qd", "Jc", "7c", "3s"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.HIGH_CARD, hand.getType());
-		assertEquals(new PokerCard("As"), hand.getKicker());
+		assertEquals(hand.getUsedCards(), hand.getKickers());
 	}
 
 	@Test
