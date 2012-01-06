@@ -10,9 +10,13 @@ import java.util.Set;
 
 public class TexasHoldEmHandFactory {
 
+	private static final int MIN_RANK_VALUE = 2;
+	private static final int MAX_RANK_VALUE = 14;
 	private static final int PAIR_LENGTH = 2;
 	private static final int TRIP_LENGTH = 3;
 	private static final int QUAD_LENGTH = 4;
+	private static final int FIRST = 0;
+	private static final int LAST = 4;
 	private static final String TWO = "2";
 	private static final int TEXAS_HOLDEM_TOTAL_SIZE = 7;
 	private static final int TEXAS_HOLDEM_HAND_SIZE = 5;
@@ -73,7 +77,7 @@ public class TexasHoldEmHandFactory {
 		if (bestHand == null) {
 			return null;
 		}
-		PokerCard kicker = bestHand.get(0);
+		PokerCard kicker = bestHand.get(FIRST);
 		if (isRoyalFlush(flush, kicker)) {
 			return new TexasHoldEmHand(bestHand, getSortedUnusedCards(pokerCards, bestHand), TexasHoldEmType.ROYAL_FLUSH);
 		}
@@ -89,22 +93,22 @@ public class TexasHoldEmHandFactory {
 		if (flushCards == null) {
 			return null;
 		}
-		List<PokerCard> usedCards = new ArrayList<PokerCard>(flushCards.subList(0, TEXAS_HOLDEM_HAND_SIZE));
+		List<PokerCard> usedCards = new ArrayList<PokerCard>(flushCards.subList(FIRST, TEXAS_HOLDEM_HAND_SIZE));
 		return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), TexasHoldEmType.FLUSH,
-				usedCards.get(0));
+				usedCards.get(FIRST));
 	}
 
 	private List<PokerCard> chooseBestStraightCards(Set<List<PokerCard>> straightHandOptions, boolean isFlushHand) {
 		List<PokerCard> bestHand = null;
 		PokerCard bestKicker = null;
 		for (List<PokerCard> option : straightHandOptions) {
-			PokerCard optionKicker = option.get(0);
+			PokerCard optionKicker = option.get(FIRST);
 			if (isRoyalFlush(isFlushHand, optionKicker)) {
 				return option;
 			}
 			if (bestHand == null || isOptionKickerBetter(bestKicker, optionKicker)) {
 				bestHand = option;
-				bestKicker = option.get(0);
+				bestKicker = option.get(FIRST);
 			}
 		}
 		return bestHand;
@@ -135,7 +139,7 @@ public class TexasHoldEmHandFactory {
 	}
 
 	private TexasHoldEmHand findHighCardHand(List<PokerCard> pokerCards) {
-		List<PokerCard> usedCards = pokerCards.subList(0, TEXAS_HOLDEM_HAND_SIZE);
+		List<PokerCard> usedCards = pokerCards.subList(FIRST, TEXAS_HOLDEM_HAND_SIZE);
 		return new TexasHoldEmHand(usedCards, pokerCards.subList(TEXAS_HOLDEM_HAND_SIZE, TEXAS_HOLDEM_TOTAL_SIZE),
 				TexasHoldEmType.HIGH_CARD, usedCards.toArray(new PokerCard[TEXAS_HOLDEM_HAND_SIZE]));
 	}
@@ -175,11 +179,11 @@ public class TexasHoldEmHandFactory {
 
 	private int nextRankValue(int rankValue, int delta) {
 		int nextRankValue = rankValue + delta;
-		if (nextRankValue > 14) {
-			nextRankValue -= 13;
+		if (nextRankValue > MAX_RANK_VALUE) {
+			nextRankValue -= (MAX_RANK_VALUE - 1);
 		}
-		if (nextRankValue < 2) {
-			nextRankValue += 13;
+		if (nextRankValue < MIN_RANK_VALUE) {
+			nextRankValue += (MAX_RANK_VALUE - 1);
 		}
 		return nextRankValue;
 	}
@@ -197,14 +201,14 @@ public class TexasHoldEmHandFactory {
 	private List<PokerCard> sortStraightCards(Set<PokerCard> straightCards) {
 		List<PokerCard> sortedStraightCards = new ArrayList<PokerCard>(straightCards);
 		Collections.sort(sortedStraightCards);
-		if (isNonLinearStraightHand(sortedStraightCards.get(0), sortedStraightCards.get(TEXAS_HOLDEM_HAND_SIZE - 1))) {
+		if (isNonLinearStraightHand(sortedStraightCards.get(FIRST), sortedStraightCards.get(TEXAS_HOLDEM_HAND_SIZE - 1))) {
 			List<PokerCard> temp = new ArrayList<PokerCard>(sortedStraightCards);
 			sortedStraightCards.clear();
 			int index = 1;
 			while ((temp.get(index - 1).getRankValue() - 1) == (temp.get(index).getRankValue())) {
 				index++;
 			}
-			List<PokerCard> firstBlock = temp.subList(0, index);
+			List<PokerCard> firstBlock = temp.subList(FIRST, index);
 			Collections.reverse(firstBlock);
 			sortedStraightCards.addAll(firstBlock);
 			List<PokerCard> secondBlock = temp.subList(index, temp.size());
@@ -254,7 +258,7 @@ public class TexasHoldEmHandFactory {
 		List<Integer> sortedRankCount = new ArrayList<Integer>(rankCountMap.keySet());
 		Collections.sort(sortedRankCount);
 		Collections.reverse(sortedRankCount);
-		Integer maxRankCount = sortedRankCount.get(0);
+		Integer maxRankCount = sortedRankCount.get(FIRST);
 		switch (maxRankCount) {
 			case QUAD_LENGTH:
 				return createQuadHand(pokerCards, rankCountMap);
@@ -270,50 +274,49 @@ public class TexasHoldEmHandFactory {
 	private TexasHoldEmHand createOneOrTwoPairHand(List<PokerCard> pokerCards,
 			Map<Integer, List<List<PokerCard>>> rankCountMap) {
 		List<List<PokerCard>> pairs = rankCountMap.get(PAIR_LENGTH);
-		List<PokerCard> usedCards = new ArrayList<PokerCard>(pairs.remove(0));
+		List<PokerCard> usedCards = new ArrayList<PokerCard>(pairs.remove(FIRST));
 		if (!pairs.isEmpty()) {
-			usedCards.addAll(pairs.get(0));
+			usedCards.addAll(pairs.get(FIRST));
 			List<PokerCard> sortedUnusedCards = getSortedUnusedCards(pokerCards, usedCards);
-			usedCards.add(sortedUnusedCards.remove(0));
+			usedCards.add(sortedUnusedCards.remove(FIRST));
 			return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), TexasHoldEmType.TWO_PAIRS,
-					usedCards.get(0), usedCards.get(PAIR_LENGTH), usedCards.get(TEXAS_HOLDEM_HAND_SIZE - 1));
+					usedCards.get(FIRST), usedCards.get(PAIR_LENGTH), usedCards.get(LAST));
 		}
 		List<PokerCard> sortedUnusedCards = getSortedUnusedCards(pokerCards, usedCards);
-		for (int i = 0; i < TEXAS_HOLDEM_HAND_SIZE - PAIR_LENGTH; i++) {
-			usedCards.add(sortedUnusedCards.remove(0));
+		for (int i = FIRST; i < TEXAS_HOLDEM_HAND_SIZE - PAIR_LENGTH; i++) {
+			usedCards.add(sortedUnusedCards.remove(FIRST));
 		}
 		return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), TexasHoldEmType.ONE_PAIR,
-				usedCards.get(0), usedCards.get(PAIR_LENGTH), usedCards.get(PAIR_LENGTH + 1),
-				usedCards.get(TEXAS_HOLDEM_HAND_SIZE - 1));
+				usedCards.get(FIRST), usedCards.get(PAIR_LENGTH), usedCards.get(PAIR_LENGTH + 1), usedCards.get(LAST));
 	}
 
 	private TexasHoldEmHand createFullHouseOrTripHand(List<PokerCard> pokerCards,
 			Map<Integer, List<List<PokerCard>>> rankCountMap) {
 		List<List<PokerCard>> trips = rankCountMap.get(TRIP_LENGTH);
-		List<PokerCard> usedCards = new ArrayList<PokerCard>(trips.remove(0));
+		List<PokerCard> usedCards = new ArrayList<PokerCard>(trips.remove(FIRST));
 		if (!trips.isEmpty()) {
-			usedCards.addAll(trips.get(0).subList(0, PAIR_LENGTH));
+			usedCards.addAll(trips.get(FIRST).subList(FIRST, PAIR_LENGTH));
 			return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), TexasHoldEmType.FULL_HOUSE,
-					usedCards.get(0), usedCards.get(TRIP_LENGTH));
+					usedCards.get(FIRST), usedCards.get(TRIP_LENGTH));
 		}
 		List<List<PokerCard>> pairList = rankCountMap.get(PAIR_LENGTH);
 		if (pairList != null && !pairList.isEmpty()) {
-			usedCards.addAll(pairList.get(0));
+			usedCards.addAll(pairList.get(FIRST));
 			return new TexasHoldEmHand(usedCards, getSortedUnusedCards(pokerCards, usedCards), TexasHoldEmType.FULL_HOUSE,
-					usedCards.get(0), usedCards.get(TRIP_LENGTH));
+					usedCards.get(FIRST), usedCards.get(TRIP_LENGTH));
 		}
 		List<PokerCard> sortedUnusedCards = getSortedUnusedCards(pokerCards, usedCards);
-		usedCards.add(sortedUnusedCards.remove(0));
-		usedCards.add(sortedUnusedCards.remove(0));
-		return new TexasHoldEmHand(usedCards, sortedUnusedCards, TexasHoldEmType.TRIP, usedCards.get(0),
-				usedCards.get(TRIP_LENGTH), usedCards.get(TEXAS_HOLDEM_HAND_SIZE - 1));
+		usedCards.add(sortedUnusedCards.remove(FIRST));
+		usedCards.add(sortedUnusedCards.remove(FIRST));
+		return new TexasHoldEmHand(usedCards, sortedUnusedCards, TexasHoldEmType.TRIP, usedCards.get(FIRST),
+				usedCards.get(TRIP_LENGTH), usedCards.get(LAST));
 	}
 
 	private TexasHoldEmHand createQuadHand(List<PokerCard> pokerCards, Map<Integer, List<List<PokerCard>>> rankCountMap) {
-		List<PokerCard> usefulCards = rankCountMap.get(QUAD_LENGTH).get(0);
+		List<PokerCard> usefulCards = rankCountMap.get(QUAD_LENGTH).get(FIRST);
 		List<PokerCard> sortedUnusedCards = getSortedUnusedCards(pokerCards, usefulCards);
-		usefulCards.add(sortedUnusedCards.remove(0));
-		return new TexasHoldEmHand(usefulCards, sortedUnusedCards, TexasHoldEmType.QUAD, usefulCards.get(0),
+		usefulCards.add(sortedUnusedCards.remove(FIRST));
+		return new TexasHoldEmHand(usefulCards, sortedUnusedCards, TexasHoldEmType.QUAD, usefulCards.get(FIRST),
 				usefulCards.get(QUAD_LENGTH));
 	}
 
