@@ -26,7 +26,8 @@ public class PotterKataTest {
 		assertEquals(new Double((8 * 4 * 0.8) + (8 * 2 * 0.95)), kataPotter.sum(0, 0, 1, 2, 2, 3));
 		assertEquals(new Double(8 + (8 * 5 * 0.75)), kataPotter.sum(0, 1, 1, 2, 3, 4));
 		assertEquals(new Double(2 * (8 * 4 * 0.8)), kataPotter.sum(0, 0, 1, 1, 2, 2, 3, 4));
-		assertEquals(new Double(3 * (8 * 5 * 0.75) + 2 * (8 * 4 * 0.8)), kataPotter.sum(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4));
+		assertEquals(new Double(3 * (8 * 5 * 0.75) + 2 * (8 * 4 * 0.8)),
+				kataPotter.sum(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4));
 	}
 
 }

@@ -55,7 +55,8 @@ public class RomanNumeralsKata {
 		while (currentIndex < romanNumber.length()) {
 			int numberLength = 1;
 			int offset = currentIndex;
-			if (currentIndex <= (romanNumber.length() - 2) && ROMAN_DECIMAL_MAP.containsKey(romanNumber.substring(currentIndex, currentIndex + 2))) {
+			if (currentIndex <= (romanNumber.length() - 2)
+					&& ROMAN_DECIMAL_MAP.containsKey(romanNumber.substring(currentIndex, currentIndex + 2))) {
 				numberLength++;
 				currentIndex++;
 			}

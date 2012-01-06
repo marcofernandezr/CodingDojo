@@ -16,18 +16,18 @@ public class PokerCard implements Comparable<PokerCard> {
 
 	private int parseRankValue(String rankStr) {
 		switch (rankStr.charAt(0)) {
-		case 'T':
-			return 10;
-		case 'J':
-			return 11;
-		case 'Q':
-			return 12;
-		case 'K':
-			return 13;
-		case 'A':
-			return 14;
-		default:
-			return new Integer(rankStr);
+			case 'T':
+				return 10;
+			case 'J':
+				return 11;
+			case 'Q':
+				return 12;
+			case 'K':
+				return 13;
+			case 'A':
+				return 14;
+			default:
+				return new Integer(rankStr);
 		}
 	}
 
@@ -51,7 +51,7 @@ public class PokerCard implements Comparable<PokerCard> {
 	public Integer getRankValue() {
 		return rankValue;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;
@@ -81,6 +81,5 @@ public class PokerCard implements Comparable<PokerCard> {
 			return false;
 		return true;
 	}
-	
-	
+
 }

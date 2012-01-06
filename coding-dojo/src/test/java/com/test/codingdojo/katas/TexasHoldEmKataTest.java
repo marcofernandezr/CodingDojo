@@ -24,7 +24,8 @@ public class TexasHoldEmKataTest {
 		List<String> twoPairHand = asList("9c", "Ah", "Ks", "Kd", "9d", "3c", "6d");
 
 		@SuppressWarnings("unchecked")
-		TexasHoldEmMatchResult result = kata.evaluateHands(foldedHandA, fullHouseHand, flushHand, foldedHandB, foldedHandC, twoPairHand);
+		TexasHoldEmMatchResult result = kata.evaluateHands(foldedHandA, fullHouseHand, flushHand, foldedHandB, foldedHandC,
+				twoPairHand);
 
 		List<TexasHoldEmHand> winnerHands = result.getWinnerHands();
 		assertEquals(1, winnerHands.size());
@@ -121,7 +122,8 @@ public class TexasHoldEmKataTest {
 		TexasHoldEmHand hand = kata.createHand(asList("Th", "2h", "As", "Qd", "Jc", "Qc", "3s"));
 		assertNotNull(hand);
 		assertEquals(TexasHoldEmType.ONE_PAIR, hand.getType());
-		assertEquals(asList(new PokerCard("Qd"), new PokerCard("As"), new PokerCard("Jc"), new PokerCard("Th")), hand.getKickers());
+		assertEquals(asList(new PokerCard("Qd"), new PokerCard("As"), new PokerCard("Jc"), new PokerCard("Th")),
+				hand.getKickers());
 	}
 
 	@Test

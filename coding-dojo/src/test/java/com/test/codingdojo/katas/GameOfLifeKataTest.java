@@ -15,7 +15,7 @@ public class GameOfLifeKataTest {
 	public void shouldSolveKataGameOfLife() throws Exception {
 		final GameOfLifeKata kata = new GameOfLifeKata();
 		assertEquals("        \n   **   \n   **   \n        ", kata.tic("        \n    *   \n   **   \n        "));
-//		show(kata);
+		// show(kata);
 	}
 
 	public void show(final GameOfLifeKata kata) throws InterruptedException {
@@ -29,18 +29,12 @@ public class GameOfLifeKataTest {
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				String input = 
-								"                                      \n" + 
-								"                         *            \n" + 
-								"                       * *            \n" + 
-								"             **      **            ** \n" + 
-								"            *   *    **            ** \n" + 
-								" **        *     *   **               \n" + 
-								" **        *   * **    * *            \n" + 
-								"           *     *       *            \n" + 
-								"            *   *                     \n" + 
-								"             **                       \n" + 
-								"                                      \n";
+				String input = "                                      \n" + "                         *            \n"
+						+ "                       * *            \n" + "             **      **            ** \n"
+						+ "            *   *    **            ** \n" + " **        *     *   **               \n"
+						+ " **        *   * **    * *            \n" + "           *     *       *            \n"
+						+ "            *   *                     \n" + "             **                       \n"
+						+ "                                      \n";
 				while (frame.isVisible()) {
 					try {
 						print(input);

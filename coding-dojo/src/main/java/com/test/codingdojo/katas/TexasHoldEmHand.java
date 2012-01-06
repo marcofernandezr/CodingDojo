@@ -14,7 +14,8 @@ public class TexasHoldEmHand implements Comparable<TexasHoldEmHand> {
 	private final List<PokerCard> kickers;
 
 	@SuppressWarnings("unchecked")
-	public TexasHoldEmHand(List<PokerCard> usedCards, List<PokerCard> unusedCards, TexasHoldEmType type, PokerCard... kickers) {
+	public TexasHoldEmHand(List<PokerCard> usedCards, List<PokerCard> unusedCards, TexasHoldEmType type,
+			PokerCard... kickers) {
 		this.usedCards = Collections.unmodifiableList(new ArrayList<PokerCard>(usedCards));
 		this.unusedCards = Collections.unmodifiableList(new ArrayList<PokerCard>(unusedCards));
 		this.kickers = Collections.unmodifiableList(Arrays.asList(kickers));

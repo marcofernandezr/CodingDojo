@@ -19,7 +19,7 @@ public class BankOCRKata {
 		List<String> results = new ArrayList<String>();
 		int row = 0;
 		while ((line = reader.readLine()) != null) {
-			if (row % 3 == 0) {
+			if (row % DIGIT_LENGTH == 0) {
 				if (row > 0) {
 					StringBuilder result = new StringBuilder();
 					for (List<String> digit : numbers) {
@@ -58,8 +58,9 @@ public class BankOCRKata {
 
 	public static enum Digit {
 
-		ZERO(" _ ", "| |", "|_|"), ONE("   ", "  |", "  |"), TWO(" _ ", " _|", "|_ "), THREE(" _ ", " _|", " _|"), FOUR("   ", "|_|", "  |"), FIVE(" _ ", "|_ ", " _|"), SIX(" _ ", "|_ ", "|_|"), SEVEN(" _ ", "  |",
-						"  |"), EIGHT(" _ ", "|_|", "|_|"), NINE(" _ ", "|_|", " _|");
+		ZERO(" _ ", "| |", "|_|"), ONE("   ", "  |", "  |"), TWO(" _ ", " _|", "|_ "), THREE(" _ ", " _|", " _|"), FOUR(
+				"   ", "|_|", "  |"), FIVE(" _ ", "|_ ", " _|"), SIX(" _ ", "|_ ", "|_|"), SEVEN(" _ ", "  |", "  |"), EIGHT(
+				" _ ", "|_|", "|_|"), NINE(" _ ", "|_|", " _|");
 
 		private final List<String> lines;
 
