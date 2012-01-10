@@ -93,6 +93,16 @@ public class YahtzeeKata {
 		return evaluateCount(dices, QUAD_SIZE);
 	}
 
+	private int evaluateUpper(List<Integer> dices, int category) {
+		int score = 0;
+		for (Integer dice : dices) {
+			if (category == dice) {
+				score += category;
+			}
+		}
+		return score;
+	}
+
 	private int evaluateCount(List<Integer> dices, int expectedCount) {
 		Map<Integer, AtomicInteger> countMap = mapDicesByCount(dices);
 		boolean hasExpectedCount = false;
@@ -107,23 +117,6 @@ public class YahtzeeKata {
 		return hasExpectedCount ? score : 0;
 	}
 
-	private List<Integer> getSortedDices(Map<Integer, AtomicInteger> countMap) {
-		List<Integer> sortedDices = new ArrayList<Integer>(countMap.keySet());
-		Collections.sort(sortedDices);
-		Collections.reverse(sortedDices);
-		return sortedDices;
-	}
-
-	private int evaluateUpper(List<Integer> dices, int category) {
-		int score = 0;
-		for (Integer dice : dices) {
-			if (category == dice) {
-				score += category;
-			}
-		}
-		return score;
-	}
-
 	private Map<Integer, AtomicInteger> mapDicesByCount(List<Integer> dices) {
 		Map<Integer, AtomicInteger> countMap = new HashMap<Integer, AtomicInteger>();
 		for (Integer dice : dices) {
@@ -135,6 +128,13 @@ public class YahtzeeKata {
 			counter.incrementAndGet();
 		}
 		return countMap;
+	}
+
+	private List<Integer> getSortedDices(Map<Integer, AtomicInteger> countMap) {
+		List<Integer> sortedDices = new ArrayList<Integer>(countMap.keySet());
+		Collections.sort(sortedDices);
+		Collections.reverse(sortedDices);
+		return sortedDices;
 	}
 
 }
