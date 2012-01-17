@@ -6,9 +6,10 @@ import org.junit.Test;
 
 public class RomanNumeralsKataTest {
 
+	private RomanNumeralsKata kata = new RomanNumeralsKata();
+
 	@Test
 	public void shouldSolveKataRomanNumerals() throws Exception {
-		RomanNumeralsKata kata = new RomanNumeralsKata();
 		assertEquals("I", kata.toRoman(1));
 		assertEquals("II", kata.toRoman(2));
 		assertEquals("III", kata.toRoman(3));
@@ -33,7 +34,6 @@ public class RomanNumeralsKataTest {
 
 	@Test
 	public void shouldSolveKataRomanNumeralsBSide() throws Exception {
-		RomanNumeralsKata kata = new RomanNumeralsKata();
 		assertEquals(1, kata.toDecimal("I"));
 		assertEquals(2, kata.toDecimal("II"));
 		assertEquals(3, kata.toDecimal("III"));
