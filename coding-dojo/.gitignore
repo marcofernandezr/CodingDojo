@@ -1,4 +1,5 @@
 /target
 /.settings
+/coding-dojo.iml
 .project
 .classpath
